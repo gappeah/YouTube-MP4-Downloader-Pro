@@ -1,20 +1,14 @@
 import os
 from moviepy.editor import *
 from pytube import YouTube
-from pydrive2.auth import GoogleAuth
-from pydrive2.drive import GoogleDrive
 import re
-import yaml
-import subprocess
 import urllib.parse
 import requests
 from time import sleep
-from pathlib import Path
-import argparse
 
 # Function to remove non-alphabet characters from the title.
 def remove_non_alpha(s):
-    return re.sub(r'[^a-zA-Z\s]', '', s).replace(' ', '-')
+    return re.sub(r"[^a-zA-Z\s]", '', s).replace(' ', '-')
 
 # Validating input url
 try:
@@ -92,9 +86,6 @@ try:
         print("Downloading audio stream...")
         audio_file = audio_stream.download() #(output_path=output_dir, filename="audio.mp4")
 
-        # Combining the audio and video file using ffmpeg tool.
-        # ... (previous code)
-
         # Combining the audio and video file using moviepy.editor
         print("Merging video and audio files...")
         video_clip = VideoFileClip(video_file)
@@ -103,12 +94,6 @@ try:
         output_path = f"{title}.mp4"
         video_clip.write_videofile(output_path, codec='libx264', audio_codec='aac')
         print("Merging completed")
-
-        # ... (rest of your code)
-
-# This section is off, the code is not working the video merging is not working,
-# #the output(s) is WEBM which contains visual data. The audio is an MP4 file
-# I need to fix this, merge the audio and video files into a single file
 
 
 except Exception as e:
