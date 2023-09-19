@@ -1,5 +1,5 @@
 import os
-from moviepy.editor import *
+from moviepy.editor import VideoFileClip, AudioFileClip
 from pytube import YouTube
 import re
 import urllib.parse
@@ -15,7 +15,7 @@ try:
     video_url = input("Paste YouTube URL: ")
     result = urllib.parse.urlparse(video_url)
 
-    # Check if the URL is valid and belongs to youtube.com
+    # Check if the URL is valid and belongs to YouTube.com
     if result.scheme == "https" and result.netloc == "www.youtube.com":
         print("URL check... PASS")
         try:
@@ -55,24 +55,30 @@ try:
     resolutions_list.append('audio')
     download_quality = input(f"Enter download quality: Available streams are {resolutions_list}: ")
     file_name = f"protocolten-{title}"
-    #output_path = os.path.join(output_dir, file_name)
+    output_dir = os.getcwd()
 
     # This condition only handles downloading and uploading of audio-only file
     if download_quality == 'audio':
         audio_only = yt.streams.filter(abr=audio_bitrate).first()
         print("Downloading audio-only file...")
-        audio_only.download() #(output_path=output_dir, filename=f"{file_name}.m4a")
+        audio_file = os.path.join(output_dir, f"{file_name}.m4a")
+        audio_only.download(output_path=output_dir, filename=f"{file_name}.m4a")
+        #audio_only.download() #(output_path=output_dir, filename=f"{file_name}.m4a")
 
     # This condition only handles downloading and uploading of 360p/720p videos
     elif download_quality in ['360p', '720p']:
         stream = yt.streams.filter(res=download_quality).first()
         print("Downloading video stream...")
-        video_file = stream.download() #(output_path=output_dir, filename=f"{file_name}.mp4")
+        video_file = os.path.join(output_dir, f"{file_name}.mp4")
+        stream.download(output_path=output_dir, filename=f"{file_name}.mp4")
+        print("Your video is ready!")
 
     # Getting input stream and downloading it into a specific directory
     elif download_quality in ['1080p', '1440p', '2160p']:
         stream = yt.streams.filter(res=download_quality).first()
         audio_stream = yt.streams.filter(abr=audio_bitrate).first()
+
+
 
         # Checking if audio and video streams are present for input link
         if not stream:
@@ -80,37 +86,28 @@ try:
         if not audio_stream:
             raise ValueError(f"No audio stream found for {download_quality}")
 
-        # Downloading audio and video files
-        print("Downloading video stream...")
-        video_file = stream.download() #(output_path=output_dir, filename="video.mp4")
-        print("Downloading audio stream...")
-        audio_file = audio_stream.download() #(output_path=output_dir, filename="audio.mp4")
+        if stream and audio_stream:
+            print("Downloading video stream...")
+            video_file = os.path.join(output_dir, f"{file_name}.mp4")
+            stream.download(output_path=output_dir, filename=f"{file_name}.mp4")
+            print("Downloading audio stream...")
+            audio_file = os.path.join(output_dir, f"{file_name}.m4a")
+            audio_stream.download(output_path=output_dir, filename=f"{file_name}.m4a")
 
-        # Combining the audio and video file using moviepy.editor
-        print("Merging video and audio files...")
-        video_clip = VideoFileClip(video_file)
-        audio_clip = AudioFileClip(audio_file)
-        video_clip = video_clip.set_audio(audio_clip)
-        output_path = f"{title}.mp4"
-        video_clip.write_videofile(output_path, codec='libx264', audio_codec='aac')
-        print("Merging completed")
+            # Combining the audio and video file using moviepy.editor
+            print("Merging video and audio files...")
+            video_clip = VideoFileClip(video_file)
+            audio_clip = AudioFileClip(audio_file)
+            video_clip = video_clip.set_audio(audio_clip)
+            output_path = f"{title}.mp4"
+            video_clip.write_videofile(output_path, codec='libx264', audio_codec='aac')
 
+            print("Merging completed")
+            print("Your video is ready!")
+        else:
+            print(f"No suitable {download_quality} video or audio stream found.")
+            raise ValueError(f"No suitable {download_quality} video or audio stream found")
 
 except Exception as e:
     print(f"An error occurred: {str(e)}")
 
-
-
-from moviepy.editor import VideoFileClip, AudioFileClip
-
-# Load the video file
-video_clip = VideoFileClip('video.mp4')
-
-# Load the audio file
-audio_clip = AudioFileClip('audio.mp4')
-
-# Set the audio of the video to the loaded audio
-video_clip = video_clip.set_audio(audio_clip)
-
-# Write the final video file
-video_clip.write_videofile('final_video.mp4', codec='libx264', audio_codec='aac')
