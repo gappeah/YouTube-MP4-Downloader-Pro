@@ -1,6 +1,6 @@
 # Youtube_Dowloader
 
-This is a work in progress for a Youtube downloader, you have the options of downloading videos in 360p, 720p, 1080p, 1440p and 2160p
+This near functioning a Youtube downloader, you have the options of downloading videos in 360p, 720p, 1080p, 1440p and 2160p
 This code downloads a YouTube video and merges the audio and video files into a single file using moviepy.editor.
 The user is asked to enter the URL of the YouTube video they want to download.
 The code checks if the URL is valid and belongs to youtube.com.
