@@ -1,18 +1,45 @@
-# Youtube_Dowloader
 
-This is near functioning Youtube downloader, with have the option of downloading videos in 360p, 720p, 1080p, 1440p and 2160p.
+## Youtube Downloader
 
-The backend script downloads a YouTube video and merges the audio and video files into a single file using moviepy.editor by asking to enter the URL of the YouTube video they want to download.
+**A Python script to download YouTube videos and audio with optional merging**
 
-The code checks if the URL is valid and belongs to youtube.com.
+### Overview
 
-If the URL is valid, the code gets a list of all available streams for the video.
+This script utilizes the PyTube and moviepy libraries to effortlessly download YouTube videos and audio files. It provides options to choose the desired download quality, including audio-only, 360p, 720p, 1080p, 1440p, and 2160p. For higher resolution videos, it automatically merges the video and audio streams using moviepy to create a complete video file.
 
-The user is asked to select a download quality from the list of available streams.
+### Requirements
 
-If the user selects "audio", the code downloads the audio-only file.
+1. Python 3.x
+2. PyTube library: `pip install pytube`
+3. moviepy library: `pip install moviepy`
 
-If the user selects a video resolution, the code downloads the video file.
+### Usage
 
-The code then merges the video WEBM file and MP4 audio files into a single file using moviepy.editor into a single MP4 format.
-The final video file is saved to the current directory.
+1. Download the `youtube_downloader.py` file to your local machine.
+2. Open the terminal or command prompt and navigate to the directory containing the `youtube_downloader.py` file.
+3. Run the script by entering the following command:
+```
+python youtube_downloader.py
+```
+4. Enter the YouTube video URL when prompted.
+5. Choose the desired download quality from the available options:
+    - `audio`: Download only the audio track.
+    - `360p`, `720p`, `1080p`, `1440p`, `2160p`: Download the video with the specified resolution.
+6. The downloaded file will be saved in the current working directory with the specified filename (default: `protocolten-<title>`). For audio-only downloads, the file extension will be `.m4a`. For videos, the file extension will be `.mp4`.
+
+### Examples
+
+**Download audio-only:**
+
+Enter the YouTube URL and select `audio` as the download quality. The audio file will be saved with the filename `protocolten-<title>.m4a`.
+
+**Download 1080p video:**
+
+Enter the YouTube URL and select `1080p` as the download quality. The complete video file will be saved with the filename `protocolten-<title>.mp4`.
+
+### Additional Notes
+
+1. The script performs basic checks to ensure the provided URL is valid and belongs to YouTube.
+2. The audio bitrate for `audio_only` and merging video/audio above 1080p is set to 128kbps.
+3. The script handles downloading and merging video/audio files successively, ensuring that the video file is created only after the audio and video streams are successfully downloaded.
+
