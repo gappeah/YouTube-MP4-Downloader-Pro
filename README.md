@@ -1,5 +1,5 @@
 
-## Youtube Downloader
+## Youtube To MP4 Dowloader Pro
 
 **A Python script to download YouTube videos and audio with optional merging**
 
