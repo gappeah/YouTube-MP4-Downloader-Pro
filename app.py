@@ -16,7 +16,7 @@ try:
     result = urllib.parse.urlparse(video_url)
 
     # Check if the URL is valid and belongs to YouTube.com
-    if result.scheme == "https" and result.netloc == "www.youtube.com":
+    if result.scheme == "https" and result.netloc == "www.youtube.com" or "youtu.be" in video_url:
         print("URL check... PASS")
         try:
             yt = YouTube(video_url)
