@@ -1,5 +1,5 @@
 
-## Youtube Downloader Pro
+## YouTube-MP4-Downloader-Pro
 
 **A Python script to download YouTube videos and audio with optional merging**
 
