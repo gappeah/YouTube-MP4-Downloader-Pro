@@ -1,11 +1,11 @@
 
 ## YouTube-MP4-Downloader-Pro
 
-**A Python script to download YouTube videos and audio with optional merging**
+**This Python script provides a tool for downloading videos from YouTube. It offers users the flexibility to choose the desired resolution for the downloaded video, including options for 360p, 720p, 1080p, 1440p, and 2160p.**
 
 ### Overview
 
-This script utilizes the PyTube and moviepy libraries to effortlessly download YouTube videos and audio files. It provides options to choose the desired download quality, including audio-only, 360p, 720p, 1080p, 1440p, and 2160p. For higher-resolution videos, it automatically merges the video and audio streams using moviepy to create a complete video file.
+This script utilises the PyTube and moviepy libraries to effortlessly download YouTube videos and audio files. It provides options to choose the desired download quality, including audio-only, 360p, 720p, 1080p, 1440p, and 2160p. For higher-resolution videos, it automatically merges the video and audio streams using moviepy to create a complete video file.
 
 ### Requirements
 
