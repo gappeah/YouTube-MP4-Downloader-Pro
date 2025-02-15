@@ -5,24 +5,11 @@ import requests
 from time import sleep
 from pytubefix import YouTube
 from pytubefix.cli import on_progress
-import subprocess
+from moviepy.editor import VideoFileClip, AudioFileClip
 
 # Function to remove non-alphabet characters from the title.
 def remove_non_alpha(s):
     return re.sub(r"[^a-zA-Z\s]", '', s).replace(' ', '-')
-
-# Function to merge video and audio using ffmpeg
-def merge_with_ffmpeg(video_file, audio_file, output_file):
-    command = [
-        'ffmpeg',
-        '-i', video_file,  # Input video file
-        '-i', audio_file,  # Input audio file
-        '-c:v', 'libx264', # Re-encode video with libx264
-        '-c:a', 'aac',     # Use AAC audio codec
-        '-strict', 'experimental',
-        output_file        # Output file
-    ]
-    subprocess.run(command, check=True)
 
 try:
     video_url = input("Paste YouTube URL: ")
@@ -108,11 +95,45 @@ try:
                 raise ValueError(f"No audio stream found for merging with {download_quality}")
             audio_file = os.path.join(output_dir, f"{file_name}.m4a")
             audio_stream.download(output_path=output_dir, filename=f"{file_name}.m4a")
-            # Merge video and audio using ffmpeg
-            merged_file = os.path.join(output_dir, f"{title}_merged.mp4")
-            merge_with_ffmpeg(video_file, audio_file, merged_file)
-            print("Merging completed using ffmpeg.")
-            print("Your video is ready!")
+
+            # Merge video and audio using moviepy
+            print("Merging video and audio files...")
+            try:
+                # Load video and audio clips
+                video_clip = VideoFileClip(video_file)
+                audio_clip = AudioFileClip(audio_file)
+
+                # Ensure the video and audio have the same duration
+                if video_clip.duration != audio_clip.duration:
+                    print("Warning: Video and audio durations do not match. Trimming to the shorter length.")
+                    min_duration = min(video_clip.duration, audio_clip.duration)
+                    video_clip = video_clip.subclip(0, min_duration)
+                    audio_clip = audio_clip.subclip(0, min_duration)
+
+                # Set the audio of the video clip
+                final_clip = video_clip.set_audio(audio_clip)
+
+                # Write the final video file with synchronized audio
+                merged_file = os.path.join(output_dir, f"{title}_merged.mp4")
+                final_clip.write_videofile(
+                    merged_file,
+                    codec='libx264',  # Video codec
+                    audio_codec='aac',  # Audio codec
+                    fps=video_clip.fps,  # Use the original video frame rate
+                    threads=4  # Use multiple threads for faster processing
+                )
+
+                # Clean up temporary files
+                video_clip.close()
+                audio_clip.close()
+                os.remove(video_file)
+                os.remove(audio_file)
+
+                print("Merging completed successfully.")
+                print(f"Your video is ready: {merged_file}")
+            except Exception as e:
+                print(f"Error during merging: {str(e)}")
+                raise
 
 except Exception as e:
     print(f"An error occurred: {str(e)}")
