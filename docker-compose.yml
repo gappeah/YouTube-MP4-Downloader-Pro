@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  youtube-to-mp4:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: youtube-to-mp4
+    volumes:
+      - .:/app  # Mount the current directory to /app in the container
+    tty: true   # Keep the container running
