@@ -1,45 +1,147 @@
+Below is a `README.md` file for your YouTube to MP4 downloader script. This file provides an overview of the project, installation instructions, usage guidelines, and other relevant details.
 
-## YouTube-MP4-Downloader-Pro
+---
 
-**This Python script provides a tool for downloading videos from YouTube. It offers users the flexibility to choose the desired resolution for the downloaded video, including options for 360p, 720p, 1080p, 1440p, and 2160p.**
+# YouTube to MP4 Downloader
 
-### Overview
+A Python script to download YouTube videos as MP4 files. The script supports downloading videos in various resolutions and can also extract audio-only files. It uses `pytubefix` for downloading and `moviepy` for merging video and audio streams.
 
-This script utilises the PyTube and moviepy libraries to effortlessly download YouTube videos and audio files. It provides options to choose the desired download quality, including audio-only, 360p, 720p, 1080p, 1440p, and 2160p. For higher-resolution videos, it automatically merges the video and audio streams using moviepy to create a complete video file.
+---
 
-### Requirements
+## Features
 
-1. Python 3.x
-2. PyTube library: `pip install pytube`
-3. moviepy library: `pip install moviepy`
+- Download YouTube videos in multiple resolutions.
+- Extract audio-only files in `.m4a` format.
+- Merge video and audio streams for adaptive streams (where video and audio are separate).
+- Clean up temporary files after merging.
+- Simple command-line interface.
 
-### Usage
+---
 
-1. Download the `youtube_downloader.py` file to your local machine.
-2. Open the terminal or command prompt and navigate to the directory containing the `youtube_downloader.py` file.
-3. Run the script by entering the following command:
+## Prerequisites
+
+Before running the script, ensure you have the following installed:
+
+1. **Python 3.6 or higher**.
+2. Required Python libraries:
+   - `pytubefix`
+   - `moviepy`
+   - `requests`
+
+---
+
+## Installation
+
+1. **Clone the repository** (if applicable):
+   ```bash
+   git clone https://github.com/gappeah/YouTube-MP4-Downloader-Pro.git
+   cd YouTube-MP4-Downloader-Pro
+   ```
+
+2. **Install the required libraries**:
+   ```bash
+   pip install pytubefix moviepy requests
+   ```
+
+3. **Ensure FFmpeg is installed** (required by `moviepy`):
+   - Download and install FFmpeg from [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html).
+   - Add FFmpeg to your system's PATH.
+
+---
+
+## Usage
+
+1. **Run the script**:
+   ```bash
+   python youtube_to_mp4.py
+   ```
+
+2. **Paste the YouTube URL**:
+   - When prompted, paste the URL of the YouTube video you want to download.
+
+3. **Select download quality**:
+   - The script will display available resolutions (e.g., `360p`, `720p`, `1080p`).
+   - Enter the desired resolution or type `audio` to download only the audio.
+
+4. **Wait for the download to complete**:
+   - The script will download the video and audio (if necessary) and merge them into a single `.mp4` file.
+   - The final file will be saved in the current working directory.
+
+---
+
+## Example
+
+```bash
+$ python youtube_to_mp4.py
+Paste YouTube URL: https://www.youtube.com/watch?v=example
+URL check... PASS
+Title: Example-Video-Title
+Gathering available streams...
+Available streams are: ['360p', '720p', '1080p', 'audio']
+Enter download quality: 720p
+Downloading adaptive video stream at 720p...
+Downloading audio stream...
+Merging video and audio files...
+Merging completed successfully.
+Your video is ready: Example-Video-Title_merged.mp4
 ```
-python youtube_downloader.py
-```
-4. Enter the YouTube video URL when prompted.
-5. Choose the desired download quality from the available options:
-    - `audio`: Download only the audio track.
-    - `360p`, `720p`, `1080p`, `1440p`, `2160p`: Download the video with the specified resolution.
-6. The downloaded file will be saved in the current working directory with the specified filename (default: `protocolten-<title>`). For audio-only downloads, the file extension will be `.m4a`. For videos, the file extension will be `.mp4`.
 
-### Examples
+---
 
-**Download audio-only:**
+## Notes
 
-Enter the YouTube URL and select `audio` as the download quality. The audio file will be saved with the filename `protocolten-<title>.m4a`.
+- **Progressive vs. Adaptive Streams**:
+  - Progressive streams contain both video and audio and are downloaded directly.
+  - Adaptive streams require separate downloads for video and audio, which are then merged.
 
-**Download 1080p video:**
+- **Temporary Files**:
+  - Temporary files (e.g., `.mp4` and `.m4a`) are deleted after merging.
 
-Enter the YouTube URL and select `1080p` as the download quality. The complete video file will be saved with the filename `protocolten-<title>.mp4`.
+- **Error Handling**:
+  - If the video is unavailable or the URL is invalid, the script will display an error message.
 
-### Additional Notes
+---
 
-1. The script performs basic checks to ensure the provided URL is valid and belongs to YouTube.
-2. The audio bitrate for `audio_only` and merging video/audio above 1080p is set to 128kbps.
-3. The script handles downloading and merging video/audio files successively, ensuring that the video file is created only after the audio and video streams are successfully downloaded.
+## Troubleshooting
 
+1. **Video Freezes During Playback**:
+   - Ensure FFmpeg is installed and added to your system's PATH.
+   - If the issue persists, try re-encoding the video using the `ffmpeg` command:
+     ```bash
+     ffmpeg -i input.mp4 -c:v libx264 -c:a aac output.mp4
+     ```
+
+2. **No Audio After Merging**:
+   - Check if the audio stream was downloaded successfully.
+   - Ensure the audio file (`.m4a`) is not corrupted.
+
+3. **Dependency Errors**:
+   - Make sure all required libraries are installed:
+     ```bash
+     pip install pytubefix moviepy requests
+     ```
+
+---
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+---
+
+## Contributing
+
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
+
+---
+
+## Acknowledgments
+
+- [pytubefix](https://github.com/pytubefix/pytubefix) for YouTube video downloading.
+- [moviepy](https://zulko.github.io/moviepy/) for video and audio merging.
+
+---
+
+Enjoy downloading YouTube videos with ease! 🎥🎶
+
+---
