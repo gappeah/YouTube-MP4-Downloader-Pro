@@ -1,15 +1,28 @@
 import os
-from moviepy.editor import VideoFileClip, AudioFileClip
-from pytubefix import YouTube
-from pytubefix.cli import on_progress
 import re
 import urllib.parse
 import requests
 from time import sleep
+from pytubefix import YouTube
+from pytubefix.cli import on_progress
+import subprocess
 
 # Function to remove non-alphabet characters from the title.
 def remove_non_alpha(s):
     return re.sub(r"[^a-zA-Z\s]", '', s).replace(' ', '-')
+
+# Function to merge video and audio using ffmpeg
+def merge_with_ffmpeg(video_file, audio_file, output_file):
+    command = [
+        'ffmpeg',
+        '-i', video_file,  # Input video file
+        '-i', audio_file,  # Input audio file
+        '-c:v', 'libx264', # Re-encode video with libx264
+        '-c:a', 'aac',     # Use AAC audio codec
+        '-strict', 'experimental',
+        output_file        # Output file
+    ]
+    subprocess.run(command, check=True)
 
 try:
     video_url = input("Paste YouTube URL: ")
@@ -95,14 +108,10 @@ try:
                 raise ValueError(f"No audio stream found for merging with {download_quality}")
             audio_file = os.path.join(output_dir, f"{file_name}.m4a")
             audio_stream.download(output_path=output_dir, filename=f"{file_name}.m4a")
-            # Merge video and audio using moviepy
-            print("Merging video and audio files...")
-            video_clip = VideoFileClip(video_file)
-            audio_clip = AudioFileClip(audio_file)
-            final_clip = video_clip.set_audio(audio_clip)
-            merged_file = f"{title}.mp4"
-            final_clip.write_videofile(merged_file, codec='libx264', audio_codec='aac')
-            print("Merging completed")
+            # Merge video and audio using ffmpeg
+            merged_file = os.path.join(output_dir, f"{title}_merged.mp4")
+            merge_with_ffmpeg(video_file, audio_file, merged_file)
+            print("Merging completed using ffmpeg.")
             print("Your video is ready!")
 
 except Exception as e:
