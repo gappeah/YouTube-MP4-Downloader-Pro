@@ -1,7 +1,3 @@
-Below is a `README.md` file for your YouTube to MP4 downloader script. This file provides an overview of the project, installation instructions, usage guidelines, and other relevant details.
-
----
-
 # YouTube to MP4 Downloader
 
 A Python script to download YouTube videos as MP4 files. The script supports downloading videos in various resolutions and can also extract audio-only files. It uses `pytubefix` for downloading and `moviepy` for merging video and audio streams.
