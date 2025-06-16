@@ -1,3 +1,5 @@
+#Import Python libraries
+# This script downloads a YouTube video and merges audio and video streams if necessary.
 import os
 import re
 import urllib.parse
